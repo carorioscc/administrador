@@ -14,13 +14,25 @@ export const useGlobalState = () => {
 //retornaa un componente
 export const GlobalProvider = ({children}) => {
     const [state, dispatch] = useReducer(AppReducer,initialState);
-    const addTransaction = () => {
+    const addTransaction = (transaction) => {
+        dispatch({
+            type:"ADD_TRANSACTION",
+            payload:transaction
+        })
         console.log("agregando transaccion");
+    };
+    const deleteTransaction = (id) => {
+        dispatch({
+            type:"DELETE_TRANSACTION",
+            payload:id
+        })
+        console.log("Eliminar transaccion");
     };
     return (
         <Context.Provider 
             value={{
                 transactions : state.transactions,
+                deleteTransaction,
                 addTransaction,
             }}
         >
