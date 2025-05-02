@@ -4,10 +4,12 @@ const initialState = {
     transactions : [],
 }
 
-export const Context = createContext();
+export const Context = createContext(initialState);
 
 export const useGlobalState = () => {
     const context = useContext(Context);
+    if (!context)
+        throw new Error("useGlobalState must be used within a GlobalState");
     return context;
 };
 //retornaa un componente
@@ -21,7 +23,7 @@ export const GlobalProvider = ({children}) => {
     //actualiza como carca cuando cambia el estado
     useEffect(()=>{
         //guardar lo que esta reflejado
-        localStorage.setItem('transactions', JSON.stringify(state))
+        localStorage.setItem('transactions', JSON.stringify(state));
 
     }, [state])
 
@@ -41,14 +43,14 @@ export const GlobalProvider = ({children}) => {
         console.log("Eliminar transaccion");
     };
     return (
-        <Context.Provider 
-            value={{
-                transactions : state.transactions,
-                deleteTransaction,
-                addTransaction,
-            }}
+        <Context.Provider
+          value={{
+            transactions: state.transactions,
+            deleteTransaction,
+            addTransaction,
+          }}
         >
-        {children}
+          {children}
         </Context.Provider>
     );
     
